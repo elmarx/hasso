@@ -1,13 +1,17 @@
 import { Config } from "./model";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { createConnection, Connection } from "home-assistant-js-websocket";
+import { createConnection } from "home-assistant-js-websocket";
 import { createSocket } from "./createSocket";
+import { HassEventEmitter, HomeAssistantWs } from "./HomeAssistantWs";
 
 export class HomeAssistant {
   private readonly client: AxiosInstance;
-  private readonly wsUrl: string;
 
-  constructor(private token: string, host: string = "localhost", port = 8123) {
+  constructor(
+    private readonly token: string,
+    private readonly host: string = "localhost",
+    private readonly port = 8123,
+  ) {
     this.client = axios.create({
       baseURL: port === 443 ? `https://${host}/api` : `http://${host}:${port}`,
       headers: {
@@ -15,11 +19,19 @@ export class HomeAssistant {
         "content-type": "application/json",
       },
     });
+  }
 
-    this.wsUrl =
-      port === 443
-        ? `wss://${host}/api/websocket`
-        : `ws://${host}:${port}/api/websocket`;
+  public async getWebsocket(): Promise<HassEventEmitter> {
+    const { version } = await this.config();
+    const wsUrl = this.port === 443
+      ? `wss://${this.host}/api/websocket`
+      : `ws://${this.host}:${this.port}/api/websocket`;
+
+    const connection = await createConnection({
+      createSocket: createSocket(version, wsUrl, this.token),
+    });
+
+    return new HomeAssistantWs(connection);
   }
 
   public async config(): Promise<Config> {
@@ -28,13 +40,5 @@ export class HomeAssistant {
     );
 
     return response.data;
-  }
-
-  public async createConnection(): Promise<Connection> {
-    const { version } = await this.config();
-
-    return createConnection({
-      createSocket: createSocket(version, this.wsUrl, this.token),
-    });
   }
 }
