@@ -1,0 +1,24 @@
+{
+  "name": "hasso",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/elmarx/hasso.git"
+  },
+  "bugs": {
+    "url": "https://github.com/elmarx/hasso/issues"
+  },
+  "homepage": "https://github.com/elmarx/hasso",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Elmar Athmer <elmar@athmer.org>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^14.14.31",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.5"
+  },
+  "dependencies": {
+  }
+}
