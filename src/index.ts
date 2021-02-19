@@ -11,9 +11,9 @@ async function main() {
 
   const api = new HomeAssistant(token, host, parseInt(port));
 
-  const config = await api.config();
+  const haConnection = await api.createConnection();
 
-  console.log(config.version);
+  await haConnection.subscribeEvents((e) => console.log(e), "state_changed");
 }
 
 if (require.main === module) {
