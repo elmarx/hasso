@@ -1,3 +1,5 @@
+import { JsonArray, JsonPrimitive, JsonValue } from "./model";
+
 export type Context = {
   id: string;
   parent_id: string | null;
@@ -50,4 +52,21 @@ export type State = {
   last_changed: string;
   last_updated: string;
   context: Context;
+};
+
+export type Service = {
+  domain: Domain;
+  services: {
+    [name: string]: {
+      description: string;
+      fields?: {
+        [fieldName: string]: {
+          description: string;
+          example?: JsonValue;
+          default?: JsonPrimitive;
+          values?: JsonArray;
+        };
+      };
+    };
+  };
 };

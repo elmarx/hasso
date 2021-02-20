@@ -4,7 +4,7 @@ import { createSocket } from "./createSocket";
 import { HassEventEmitter, HomeAssistantWs } from "./HomeAssistantWs";
 import { URL } from "url";
 import { toWebsocket } from "../utils/toWebsocket";
-import { Config, State } from "./api";
+import { Config, Service, State } from "./api";
 import { isError, tryF } from "ts-try";
 import { ApiResponse } from "./model";
 
@@ -74,5 +74,9 @@ export class HomeAssistant {
 
   public async stateList(): Promise<ApiResponse<State[]>> {
     return this.get("/states");
+  }
+
+  public async serviceList(): Promise<ApiResponse<Service[]>> {
+    return this.get("/services");
   }
 }
