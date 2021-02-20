@@ -1,3 +1,5 @@
+import { Context } from "./api";
+
 export const enum Event {
   TAG_SCANNED = "tag_scanned",
 }
@@ -10,11 +12,7 @@ export type TagScannedEvent = {
   };
   origin: string;
   time_fired: string;
-  context: {
-    id: string;
-    parent_id: null;
-    user_id: string;
-  };
+  context: Context;
 };
 
 export interface HassEvents {
