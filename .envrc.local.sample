@@ -1,0 +1,2 @@
+export HASS_TOKEN=$(pass show home-assistant/token)
+export HASS_URL=http://localhost:8123
