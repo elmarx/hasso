@@ -1,4 +1,4 @@
-import { toWebsocket } from "./toWebsocket";
+import { toWebsocket } from "../../src/utils/toWebsocket";
 
 test("http to ws", () => {
   const sample = "http://example.com:8123";
