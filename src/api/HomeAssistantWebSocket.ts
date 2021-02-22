@@ -3,6 +3,8 @@ import EventEmitter from "events";
 import { Event, HassEvents } from "./events";
 import assert from "assert";
 import StrictEventEmitter from "strict-event-emitter-types";
+import { Try, tryF } from "ts-try";
+import { DeviceRegistryEntry } from "./results";
 
 export type HassEventEmitter = StrictEventEmitter<EventEmitter, HassEvents>;
 
@@ -52,5 +54,13 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
 
   public close(): void {
     return this.connection.close();
+  }
+
+  public fetchDeviceRegistry(): Promise<Try<DeviceRegistryEntry[]>> {
+    return tryF(
+      this.connection.sendMessagePromise<DeviceRegistryEntry[]>({
+        type: "config/device_registry/list",
+      }),
+    );
   }
 }
