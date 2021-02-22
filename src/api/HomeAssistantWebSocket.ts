@@ -49,4 +49,8 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
   private callback(eventName: Event) {
     return (payload: any) => this.ee.emit(eventName, payload);
   }
+
+  public close(): void {
+    return this.connection.close();
+  }
 }
