@@ -1,4 +1,4 @@
 export { HomeAssistant } from "./api/HomeAssistant";
-export { HassEventEmitter } from "./api/HomeAssistantWs";
+export { HomeAssistantWebSocket } from "./api/HomeAssistantWebSocket";
 
 export * from "./api/events";

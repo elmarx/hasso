@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import { createConnection } from "home-assistant-js-websocket";
 import { createSocket } from "./createSocket";
-import { HassEventEmitter, HomeAssistantWs } from "./HomeAssistantWs";
+import { HomeAssistantWebSocket } from "./HomeAssistantWebSocket";
 import { URL } from "url";
 import { toWebsocket } from "../utils/toWebsocket";
 import { Config, Service, State } from "./api";
@@ -31,7 +31,7 @@ export class HomeAssistant {
     });
   }
 
-  public async getWebsocket(): Promise<HassEventEmitter> {
+  public async getWebsocket(): Promise<HomeAssistantWebSocket> {
     const { version } = await this.config();
     const wsUrl = toWebsocket(this.url);
     wsUrl.pathname = "/api/websocket";
@@ -40,7 +40,7 @@ export class HomeAssistant {
       createSocket: createSocket(version, wsUrl.toString(), this.token),
     });
 
-    return new HomeAssistantWs(connection);
+    return new HomeAssistantWebSocket(connection);
   }
 
   public async config(): Promise<Config> {
