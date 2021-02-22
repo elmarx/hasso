@@ -1,7 +1,12 @@
 import { ha } from "./index";
 
-const api = ha();
+async function main() {
+  const ws = await ha().getWebsocket();
 
-api.getWebsocket().then((ws) => {
-  ws.getDeviceList().then(console.log);
-});
+  const deviceList = await ws.fetchDeviceRegistry();
+  console.log(deviceList);
+
+  ws.close();
+}
+
+main().catch(console.error);
