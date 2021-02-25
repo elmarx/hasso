@@ -4,11 +4,21 @@ import { Event, HassEvents } from "./events";
 import assert from "assert";
 import StrictEventEmitter from "strict-event-emitter-types";
 import { Try, tryF } from "ts-try";
-import { DeviceRegistryEntry } from "./results";
+import { DeviceRegistryEntry, RelatedResult } from "./results";
 
 export type HassEventEmitter = StrictEventEmitter<EventEmitter, HassEvents>;
 
 type SubscriptionUnsubscribe = () => Promise<void>;
+
+export type ItemType =
+  | "area"
+  | "automation"
+  | "config_entry"
+  | "device"
+  | "entity"
+  | "group"
+  | "scene"
+  | "script";
 
 // TBH: I don't now exactly how it works, but the `EventEmitter as…` part takes care to expose a stricter interface
 // than 'EventEmitter', more precisely the StrictEventEmitter. See https://github.com/bterlson/strict-event-emitter-types#usage-with-subclasses
@@ -60,6 +70,19 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
     return tryF(
       this.connection.sendMessagePromise<DeviceRegistryEntry[]>({
         type: "config/device_registry/list",
+      }),
+    );
+  }
+
+  public findRelated(
+    itemType: ItemType,
+    itemId: string,
+  ): Promise<Try<RelatedResult>> {
+    return tryF(
+      this.connection.sendMessagePromise<RelatedResult>({
+        type: "search/related",
+        item_type: itemType,
+        item_id: itemId,
       }),
     );
   }
