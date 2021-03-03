@@ -26,5 +26,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: yarn install
-    - run: ./node_modules/.bin/tsc --noEmit
+
+    - name: typecheck sources
+      run: ./node_modules/.bin/tsc -b
+
+    - name: typecheck examples
+      run: ../node_modules/.bin/tsc -b
+      working-directory: examples
+
     - run: ./node_modules/.bin/jest
