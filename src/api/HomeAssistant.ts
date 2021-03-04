@@ -4,7 +4,7 @@ import { createSocket } from "./createSocket";
 import { HomeAssistantWebSocket } from "./HomeAssistantWebSocket";
 import { URL } from "url";
 import { toWebsocket } from "../utils/toWebsocket";
-import { Config, Service, State } from "./api";
+import { Config, Service, State } from "./model.api";
 import { isError, tryF } from "ts-try";
 import { ApiResponse } from "./model";
 
@@ -17,7 +17,7 @@ export class HomeAssistant {
 
   constructor(
     private readonly token: string,
-    private readonly url: string = "http://localhost:8123",
+    private readonly url: string = "http://localhost:8123"
   ) {
     const baseUrl = new URL(this.url);
     baseUrl.pathname = "/api";
@@ -45,7 +45,7 @@ export class HomeAssistant {
 
   public async config(): Promise<Config> {
     const response: AxiosResponse<Config> = await this.client.get<Config>(
-      "/config",
+      "/config"
     );
 
     return response.data;
@@ -56,7 +56,7 @@ export class HomeAssistant {
    */
   private async get<T>(path: string): Promise<ApiResponse<T>> {
     const response = await tryF<AxiosResponse<T>, AxiosError<T>>(
-      this.client.get<T>(path),
+      this.client.get<T>(path)
     );
 
     if (isAxiosError<T>(response)) return response;

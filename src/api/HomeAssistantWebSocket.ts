@@ -1,6 +1,6 @@
 import { Connection } from "home-assistant-js-websocket";
-import EventEmitter from "events";
-import { Event, HassEvents } from "./events";
+import EventEmitter from "api/model.events";
+import { Event, HassEvents } from "./model.events";
 import assert from "assert";
 import StrictEventEmitter from "strict-event-emitter-types";
 import { Try, tryF } from "ts-try";
@@ -41,7 +41,7 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
       if (!this.eventSubscriptions.has(eventName)) {
         const unsubscribe = await this.connection.subscribeEvents(
           this.callback(eventName),
-          eventName,
+          eventName
         );
         this.eventSubscriptions.set(eventName, unsubscribe);
       }
@@ -70,20 +70,20 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
     return tryF(
       this.connection.sendMessagePromise<DeviceRegistryEntry[]>({
         type: "config/device_registry/list",
-      }),
+      })
     );
   }
 
   public findRelated(
     itemType: ItemType,
-    itemId: string,
+    itemId: string
   ): Promise<Try<RelatedResult>> {
     return tryF(
       this.connection.sendMessagePromise<RelatedResult>({
         type: "search/related",
         item_type: itemType,
         item_id: itemId,
-      }),
+      })
     );
   }
 }
