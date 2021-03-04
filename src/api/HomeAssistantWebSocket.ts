@@ -5,6 +5,7 @@ import StrictEventEmitter from "strict-event-emitter-types";
 import { Try, tryF } from "ts-try";
 import { DeviceRegistryEntry, RelatedResult } from "./results";
 import EventEmitter from "events";
+import { reviveEvent } from "./revive.events";
 
 export type HassEventEmitter = StrictEventEmitter<EventEmitter, HassEvents>;
 
@@ -40,7 +41,7 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
     this.ee.on("newListener", async (eventName: Event) => {
       if (!this.eventSubscriptions.has(eventName)) {
         const unsubscribe = await this.connection.subscribeEvents(
-          this.callback(eventName),
+          this.eventCallback(eventName),
           eventName
         );
         this.eventSubscriptions.set(eventName, unsubscribe);
@@ -58,8 +59,9 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
     });
   }
 
-  private callback(eventName: Event) {
-    return (payload: any) => this.ee.emit(eventName, payload);
+  private eventCallback(eventName: Event) {
+    return (payload: any) =>
+      this.ee.emit(eventName, reviveEvent(eventName, payload));
   }
 
   public close(): void {
