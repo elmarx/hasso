@@ -1,2 +1,2 @@
-export * from "./api";
-export * from "./events";
+export * from "./model.api";
+export * from "./model.events";

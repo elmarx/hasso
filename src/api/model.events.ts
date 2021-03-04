@@ -1,4 +1,4 @@
-import { Context, State } from "./api";
+import { Context, State } from "./model.api";
 
 // events as returned via `curl -s -H "Authorization: Bearer $HASS_TOKEN" $HASS_URL/api/events | jq .[].event | sort | uniq`
 // then replace `^"(.*)"$` with `\U$1\E = "$1",`

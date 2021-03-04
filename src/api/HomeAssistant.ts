@@ -4,7 +4,7 @@ import { createSocket } from "./createSocket";
 import { HomeAssistantWebSocket } from "./HomeAssistantWebSocket";
 import { URL } from "url";
 import { toWebsocket } from "../utils/toWebsocket";
-import { Config, Service, State } from "./api";
+import { Config, Service, State } from "./model.api";
 import { isError, tryF } from "ts-try";
 import { ApiResponse } from "./model";
 
