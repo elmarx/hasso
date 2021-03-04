@@ -49,8 +49,8 @@ export type State = {
   entity_id: string;
   state: string;
   attributes: Record<string, string | boolean | number>;
-  last_changed: string;
-  last_updated: string;
+  last_changed: Date;
+  last_updated: Date;
   context: Context;
 };
 

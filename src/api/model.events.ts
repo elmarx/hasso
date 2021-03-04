@@ -23,7 +23,7 @@ export type TagScannedEvent = {
     device_id: string;
   };
   origin: string;
-  time_fired: string;
+  time_fired: Date;
   context: Context;
 };
 
@@ -35,7 +35,7 @@ export type StateChangedEvent = {
     new_state: State;
   };
   origin: string;
-  time_fired: string;
+  time_fired: Date;
   context: Context;
 };
 
