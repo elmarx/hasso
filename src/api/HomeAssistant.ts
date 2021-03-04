@@ -7,6 +7,8 @@ import { toWebsocket } from "../utils/toWebsocket";
 import { Config, Service, State } from "./model.api";
 import { isError, tryF } from "ts-try";
 import { ApiResponse } from "./model";
+import { RawState } from "./model.raw";
+import { reviveState } from "./revive.state";
 
 function isAxiosError<T>(o: unknown): o is AxiosError<T> {
   return isError(o) && (o as any).isAxiosError;
@@ -64,16 +66,29 @@ export class HomeAssistant {
     return response.data;
   }
 
+  private async getTransformed<R, T>(
+    path: string,
+    transformer: (r: R) => T
+  ): Promise<ApiResponse<T>> {
+    const raw = await this.get<R>(path);
+
+    if (isError(raw)) return raw;
+
+    return transformer(raw);
+  }
+
   /**
    * Returns a state object for specified entity_id. Returns 404 if not found.
    * @param entityId
    */
   public async state(entityId: string): Promise<ApiResponse<State>> {
-    return this.get("/states/" + entityId);
+    return this.getTransformed("/states/" + entityId, reviveState);
   }
 
   public async stateList(): Promise<ApiResponse<State[]>> {
-    return this.get("/states");
+    return this.getTransformed<RawState[], State[]>("/states", (r) =>
+      r.map(reviveState)
+    );
   }
 
   public async serviceList(): Promise<ApiResponse<Service[]>> {

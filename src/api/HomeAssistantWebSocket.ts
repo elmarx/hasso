@@ -1,10 +1,10 @@
 import { Connection } from "home-assistant-js-websocket";
-import EventEmitter from "api/model.events";
 import { Event, HassEvents } from "./model.events";
 import assert from "assert";
 import StrictEventEmitter from "strict-event-emitter-types";
 import { Try, tryF } from "ts-try";
 import { DeviceRegistryEntry, RelatedResult } from "./results";
+import EventEmitter from "events";
 
 export type HassEventEmitter = StrictEventEmitter<EventEmitter, HassEvents>;
 
