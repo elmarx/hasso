@@ -1,13 +1,20 @@
 import { ha } from "./index";
-import { HassEvent } from "../src";
+import { HassEvent, KnownEntities, reviveSunState } from "../src";
 import { diffString } from "json-diff";
+import { isError } from "ts-try";
 
-const entityId = "sun.sun";
+const entityId = KnownEntities.Sun;
 const api = ha();
 
 api
   .state(entityId)
-  .then((v) => console.log("initial value:", v))
+  .then((v) => {
+    if (isError(v)) {
+      console.error(v);
+    } else {
+      console.log("initial value", reviveSunState(v));
+    }
+  })
   .catch(console.error);
 api.getWebsocket().then((ws) =>
   ws.on(HassEvent.STATE_CHANGED, (event) => {
