@@ -1,6 +1,6 @@
-import { RawState } from "../../src/api/model.raw";
+import { RawState } from "../../src/model/raw";
+import { reviveStateState } from "../../src/core/revive";
 import { State } from "../../src";
-import { reviveState } from "../../src/api/revive.state";
 
 test("reviveState", () => {
   const sample: RawState = {
@@ -51,5 +51,5 @@ test("reviveState", () => {
     },
   };
 
-  expect(reviveState(sample)).toEqual(expected);
+  expect(reviveStateState(sample)).toEqual(expected);
 });

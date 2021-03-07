@@ -1,4 +1,13 @@
-import { Event } from "./model.events";
+import { RawState } from "../model/raw";
+import { HassEvent, State } from "../model";
+
+export function reviveStateState(s: RawState): State {
+  return {
+    ...s,
+    last_changed: new Date(s.last_changed),
+    last_updated: new Date(s.last_updated),
+  };
+}
 
 export function reviveTimeFired<T extends { time_fired: string }>(
   e: T
@@ -12,7 +21,7 @@ export function reviveTimeFired<T extends { time_fired: string }>(
 }
 
 export function reviveEvent<T extends { time_fired: string }>(
-  eventName: Event,
+  eventName: HassEvent,
   event: T
 ) {
   switch (eventName) {

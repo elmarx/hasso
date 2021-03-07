@@ -1,5 +1,5 @@
 import assert from "assert";
-import { Event, HomeAssistant } from "../src";
+import { HomeAssistant } from "../src";
 
 export function ha(): HomeAssistant {
   const token = process.env.HASS_TOKEN;

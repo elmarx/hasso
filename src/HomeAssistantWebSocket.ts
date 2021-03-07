@@ -1,11 +1,15 @@
 import { Connection } from "home-assistant-js-websocket";
-import { Event, HassEvents } from "./model.events";
+import {
+  DeviceRegistryEntry,
+  HassEvent,
+  HassEvents,
+  RelatedResult,
+} from "./model";
 import assert from "assert";
 import StrictEventEmitter from "strict-event-emitter-types";
 import { Try, tryF } from "ts-try";
-import { DeviceRegistryEntry, RelatedResult } from "./results";
 import EventEmitter from "events";
-import { reviveEvent } from "./revive.events";
+import { reviveEvent } from "./core/revive";
 
 export type HassEventEmitter = StrictEventEmitter<EventEmitter, HassEvents>;
 
@@ -27,7 +31,7 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
   new (): HassEventEmitter;
 }) {
   private readonly eventSubscriptions: Map<
-    Event,
+    HassEvent,
     SubscriptionUnsubscribe
   > = new Map();
   private readonly ee: EventEmitter;
@@ -38,7 +42,7 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
     this.ee = this;
 
     // upon first listener, subscribe to the websocket
-    this.ee.on("newListener", async (eventName: Event) => {
+    this.ee.on("newListener", async (eventName: HassEvent) => {
       if (!this.eventSubscriptions.has(eventName)) {
         const unsubscribe = await this.connection.subscribeEvents(
           this.eventCallback(eventName),
@@ -49,7 +53,7 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
     });
 
     // upon listener removal, unsubscribe if no listeners remain
-    this.ee.on("removeListener", async (eventName: Event) => {
+    this.ee.on("removeListener", async (eventName: HassEvent) => {
       if (this.listenerCount(eventName) === 0) {
         const unsubscribe = this.eventSubscriptions.get(eventName);
         assert(unsubscribe);
@@ -59,7 +63,7 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
     });
   }
 
-  private eventCallback(eventName: Event) {
+  private eventCallback(eventName: HassEvent) {
     return (payload: any) =>
       this.ee.emit(eventName, reviveEvent(eventName, payload));
   }

@@ -1,18 +1,19 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
-import { createConnection } from "home-assistant-js-websocket";
-import { createSocket } from "./createSocket";
+import { createConnection, HassConfig } from "home-assistant-js-websocket";
+import { createSocket } from "./core/createSocket";
 import { HomeAssistantWebSocket } from "./HomeAssistantWebSocket";
 import { URL } from "url";
-import { toWebsocket } from "../utils/toWebsocket";
-import { Config, Service, State } from "./model.api";
+import { toWebsocket } from "./utils/toWebsocket";
 import { isError, tryF } from "ts-try";
-import { ApiResponse } from "./model";
-import { RawState } from "./model.raw";
-import { reviveState } from "./revive.state";
+import { RawState } from "./model/raw";
+import { Service, State } from "./model";
+import { reviveStateState } from "./core/revive";
 
 function isAxiosError<T>(o: unknown): o is AxiosError<T> {
   return isError(o) && (o as any).isAxiosError;
 }
+
+export type ApiResponse<T> = T | AxiosError<unknown>;
 
 export class HomeAssistant {
   private readonly client: AxiosInstance;
@@ -45,8 +46,8 @@ export class HomeAssistant {
     return new HomeAssistantWebSocket(connection);
   }
 
-  public async config(): Promise<Config> {
-    const response: AxiosResponse<Config> = await this.client.get<Config>(
+  public async config(): Promise<HassConfig> {
+    const response: AxiosResponse<HassConfig> = await this.client.get<HassConfig>(
       "/config"
     );
 
@@ -82,12 +83,12 @@ export class HomeAssistant {
    * @param entityId
    */
   public async state(entityId: string): Promise<ApiResponse<State>> {
-    return this.getTransformed("/states/" + entityId, reviveState);
+    return this.getTransformed("/states/" + entityId, reviveStateState);
   }
 
   public async stateList(): Promise<ApiResponse<State[]>> {
     return this.getTransformed<RawState[], State[]>("/states", (r) =>
-      r.map(reviveState)
+      r.map(reviveStateState)
     );
   }
 

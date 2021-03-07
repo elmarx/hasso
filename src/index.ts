@@ -1,4 +1,4 @@
-export { HomeAssistant } from "./api/HomeAssistant";
-export { HomeAssistantWebSocket } from "./api/HomeAssistantWebSocket";
+export { HomeAssistant } from "./HomeAssistant";
+export { HomeAssistantWebSocket } from "./HomeAssistantWebSocket";
 
-export * from "./api";
+export * from "./model";

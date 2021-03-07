@@ -1,8 +1,9 @@
-import { Context, State } from "./model.api";
+import { StateChangedEvent } from "./stateChangedEvent";
+import { TagScannedEvent } from "./tagScannedEvent";
 
 // events as returned via `curl -s -H "Authorization: Bearer $HASS_TOKEN" $HASS_URL/api/events | jq .[].event | sort | uniq`
 // then replace `^"(.*)"$` with `\U$1\E = "$1",`
-export const enum Event {
+export const enum HassEvent {
   COMPONENT_LOADED = "component_loaded",
   CORE_CONFIG_UPDATED = "core_config_updated",
   DEVICE_REGISTRY_UPDATED = "device_registry_updated",
@@ -16,30 +17,7 @@ export const enum Event {
   USER_REMOVED = "user_removed",
 }
 
-export type TagScannedEvent = {
-  event_type: Event.TAG_SCANNED;
-  data: {
-    tag_id: string;
-    device_id: string;
-  };
-  origin: string;
-  time_fired: Date;
-  context: Context;
-};
-
-export type StateChangedEvent = {
-  event_type: Event.STATE_CHANGED;
-  data: {
-    entity_id: string;
-    old_state: State;
-    new_state: State;
-  };
-  origin: string;
-  time_fired: Date;
-  context: Context;
-};
-
 export interface HassEvents {
-  [Event.TAG_SCANNED]: (event: TagScannedEvent) => unknown;
-  [Event.STATE_CHANGED]: (event: StateChangedEvent) => unknown;
+  [HassEvent.TAG_SCANNED]: (event: TagScannedEvent) => unknown;
+  [HassEvent.STATE_CHANGED]: (event: StateChangedEvent) => unknown;
 }

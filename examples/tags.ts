@@ -1,7 +1,7 @@
 import { ha } from "./index";
-import { Event } from "../src";
+import { HassEvent } from "../src";
 
 ha()
   .getWebsocket()
-  .then((websocket) => websocket.on(Event.TAG_SCANNED, console.log))
+  .then((websocket) => websocket.on(HassEvent.TAG_SCANNED, console.log))
   .catch(console.error);
