@@ -1,4 +1,4 @@
-import { reviveTimeFired } from "../../src/api/revive.events";
+import { reviveTimeFired } from "../../src/core/revive";
 
 test("revive time_fired in events", () => {
   const sample = {

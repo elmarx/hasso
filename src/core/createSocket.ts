@@ -49,7 +49,7 @@ function handleAuth(socket: WebSocket, open: () => void, done: () => void) {
 export function createSocket(
   version: string,
   socketUrl: string,
-  token: string
+  token: string,
 ) {
   return async (): Promise<HaWebSocket> => {
     const ws = new WebSocket(socketUrl);

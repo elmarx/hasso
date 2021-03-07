@@ -4,7 +4,7 @@ Current state: experimental/under development.
 
 ## REST API
 
-Class [`HomeAssistant`](./src/api/HomeAssistant.ts) provides access to [Home Assistant's REST API](https://developers.home-assistant.io/docs/api/rest/). 
+Class [`HomeAssistant`](src/HomeAssistant.ts) provides access to [Home Assistant's REST API](https://developers.home-assistant.io/docs/api/rest/). 
                       
 ## Websocket API
 
