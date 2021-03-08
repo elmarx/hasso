@@ -1,5 +1,5 @@
 import { RawState } from "../../src/model/raw";
-import { reviveStateState } from "../../src/core/revive";
+import { reviveState } from "../../src/core/revive";
 import { State } from "../../src";
 
 test("reviveState", () => {
@@ -51,5 +51,5 @@ test("reviveState", () => {
     },
   };
 
-  expect(reviveStateState(sample)).toEqual(expected);
+  expect(reviveState(sample)).toEqual(expected);
 });

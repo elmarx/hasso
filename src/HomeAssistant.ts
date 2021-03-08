@@ -7,7 +7,7 @@ import { toWebsocket } from "./utils/toWebsocket";
 import { isError, tryF } from "ts-try";
 import { RawState } from "./model/raw";
 import { Service, State } from "./model";
-import { reviveStateState } from "./core/revive";
+import { reviveState } from "./core/revive";
 
 function isAxiosError<T>(o: unknown): o is AxiosError<T> {
   return isError(o) && (o as any).isAxiosError;
@@ -85,12 +85,13 @@ export class HomeAssistant {
    * @param entityId
    */
   public async state(entityId: string): Promise<ApiResponse<State>> {
-    return this.getTransformed("/states/" + entityId, reviveStateState);
+    return this.getTransformed("/states/" + entityId, reviveState);
   }
 
   public async stateList(): Promise<ApiResponse<State[]>> {
-    return this.getTransformed<RawState[], State[]>("/states", (r) =>
-      r.map(reviveStateState)
+    return this.getTransformed<RawState[], State[]>(
+      "/states",
+      (r) => r.map(reviveState),
     );
   }
 

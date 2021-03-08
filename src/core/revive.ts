@@ -1,7 +1,7 @@
 import { RawState } from "../model/raw";
 import { HassEvent, State } from "../model";
 
-export function reviveStateState(s: RawState): State {
+export function reviveState(s: RawState): State {
   return {
     ...s,
     last_changed: new Date(s.last_changed),
