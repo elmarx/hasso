@@ -10,6 +10,7 @@ import StrictEventEmitter from "strict-event-emitter-types";
 import { Try, tryF } from "ts-try";
 import EventEmitter from "events";
 import { reviveEvent } from "./core/revive";
+import { defer } from "./utils/deferred";
 
 export type HassEventEmitter = StrictEventEmitter<EventEmitter, HassEvents>;
 
@@ -68,8 +69,11 @@ export class HomeAssistantWebSocket extends (EventEmitter as {
       this.ee.emit(eventName, reviveEvent(eventName, payload));
   }
 
-  public close(): void {
-    return this.connection.close();
+  public close(): Promise<unknown> {
+    const done = defer<unknown>();
+    this.connection.socket.addEventListener("close", done.resolve);
+    this.connection.close();
+    return done.promise;
   }
 
   public fetchDeviceRegistry(): Promise<Try<DeviceRegistryEntry[]>> {
