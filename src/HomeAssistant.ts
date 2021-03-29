@@ -35,12 +35,11 @@ export class HomeAssistant {
   }
 
   public async getWebsocket(): Promise<HomeAssistantWebSocket> {
-    const { version } = await this.config();
     const wsUrl = toWebsocket(this.url);
     wsUrl.pathname = "/api/websocket";
 
     const connection = await createConnection({
-      createSocket: createSocket(version, wsUrl.toString(), this.token),
+      createSocket: () => createSocket(wsUrl.toString(), this.token),
     });
 
     return new HomeAssistantWebSocket(connection);
