@@ -24,7 +24,7 @@
     "node": ">= 14.16.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.20",
+    "@types/jest": "^28.1.6",
     "@types/json-diff": "^0.5.1",
     "@types/node": "^14.14.31",
     "@types/ws": "^7.4.0",
