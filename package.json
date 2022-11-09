@@ -41,7 +41,7 @@
     "axios": "^0.21.1",
     "home-assistant-js-websocket": "^5.8.1",
     "ts-try": "^0.2.0",
-    "ws": "^7.4.3"
+    "ws": "^8.11.0"
   },
   "jest": {
     "preset": "ts-jest",
